@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GDP Analyzer</title>
+  <meta name="description" content="Compare the size and growth of the world's economies, 1960 to 2023, using World Bank data.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&display=swap">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="masthead">
+    <div class="masthead-inner">
+      <h1>GDP Analyzer</h1>
+      <p class="lede">Compare the size and growth of <span id="countryCount">200+</span> economies from 1960 to 2023.</p>
+    </div>
+  </header>
+
+  <main class="layout">
+    <!-- Chart -->
+    <section class="panel chart-panel" aria-labelledby="chartTitle">
+      <div class="toolbar">
+        <h2 id="chartTitle" class="visually-hidden">Chart</h2>
+        <div class="segmented" role="radiogroup" aria-label="Measure">
+          <label><input type="radio" name="metric" value="gdp" checked><span>GDP</span></label>
+          <label><input type="radio" name="metric" value="gdppc"><span>Per person</span></label>
+          <label><input type="radio" name="metric" value="growth"><span>Annual change</span></label>
+          <label><input type="radio" name="metric" value="share"><span>Share of world</span></label>
+        </div>
+        <div class="toolbar-right">
+          <label class="range-select">From
+            <select id="fromYear"></select>
+          </label>
+          <label class="range-select">to
+            <select id="toYear"></select>
+          </label>
+          <label class="switch">
+            <input type="checkbox" id="logScale">
+            <span>Log scale</span>
+          </label>
+        </div>
+      </div>
+      <div id="chart" class="chart"></div>
+      <p class="chart-note" id="chartNote"></p>
+    </section>
+
+    <!-- Selected countries + summary numbers -->
+    <aside class="panel countries-panel" aria-labelledby="countriesTitle">
+      <div class="panel-head">
+        <h2 id="countriesTitle">Countries</h2>
+        <span class="hint" id="slotsLeft"></span>
+      </div>
+      <form id="addForm" class="add-form" autocomplete="off">
+        <label for="addInput" class="visually-hidden">Add a country</label>
+        <input id="addInput" list="countryList" placeholder="Add a country">
+        <datalist id="countryList"></datalist>
+        <button type="submit">Add</button>
+      </form>
+      <p class="form-error" id="addError" role="alert"></p>
+      <ul id="selectedList" class="selected-list"></ul>
+    </aside>
+
+    <!-- Side-by-side numbers for the selected countries -->
+    <section class="panel compare-panel" aria-labelledby="compareTitle">
+      <div class="panel-head">
+        <h2 id="compareTitle">Comparison</h2>
+        <span class="hint" id="compareRange"></span>
+      </div>
+      <div class="table-scroll">
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th scope="col">Country</th>
+              <th scope="col" class="num" id="gdpHeading">GDP</th>
+              <th scope="col" class="num">Per person</th>
+              <th scope="col" class="num">Share of world</th>
+              <th scope="col" class="num">Avg. growth / yr</th>
+              <th scope="col" class="num">Growth since start</th>
+            </tr>
+          </thead>
+          <tbody id="compareBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Rankings for one year -->
+    <section class="panel rank-panel" aria-labelledby="rankTitle">
+      <div class="rank-head">
+        <p class="big-year" id="bigYear" aria-hidden="true">2023</p>
+        <div class="rank-controls">
+          <h2 id="rankTitle">Rankings</h2>
+          <p class="rank-sub" id="rankSub"></p>
+          <div class="scrubber">
+            <button type="button" id="playBtn" class="play" aria-label="Play through the years">
+              <svg viewBox="0 0 16 16" aria-hidden="true"><path id="playIcon" d="M4 2.5v11l9-5.5z"/></svg>
+            </button>
+            <label for="yearSlider" class="visually-hidden">Year</label>
+            <input type="range" id="yearSlider" min="1960" max="2023" value="2023" step="1">
+          </div>
+          <div class="region-tabs" role="radiogroup" aria-label="Region" id="regionTabs"></div>
+        </div>
+      </div>
+
+      <table class="rank-table">
+        <thead>
+          <tr>
+            <th scope="col" class="col-rank">#</th>
+            <th scope="col">Country</th>
+            <th scope="col" class="col-move"><span class="visually-hidden">Change in rank since last year</span></th>
+            <th scope="col" class="col-value" id="valueHeading">GDP</th>
+          </tr>
+        </thead>
+        <tbody id="rankBody"></tbody>
+      </table>
+      <button type="button" id="showAll" class="text-button">Show all</button>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>
+      Data: World Bank, GDP in current US dollars and total population, 1960–2023
+      (<a href="https://data.worldbank.org/indicator/NY.GDP.MKTP.CD" target="_blank" rel="noopener">source</a>).
+      Values are not adjusted for inflation, so "annual change" includes price and exchange-rate changes as well as real growth.
+    </p>
+    <p>Built by Chiaralei Rumbaoa with HTML, CSS and JavaScript.</p>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/analysis.js"></script>
+  <script src="js/chart.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
